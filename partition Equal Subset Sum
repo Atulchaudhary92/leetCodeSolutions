@@ -1,0 +1,58 @@
+// recursive way 
+// class Solution {
+// public:
+//     bool subsetEquals(vector<int>& nums,int index,int n,int target,vector<vector<int>>&dp){
+//                     if(index>=n) return false;
+//                     bool take=false;
+//                     if(target==0){ return true;}
+//                     if(dp[index][target]!=-1) return dp[index][target];
+//                     if(nums[index]<=target){
+//                         take=subsetEquals(nums,index+1,n,target-nums[index],dp);
+//                     }
+//                     bool notTake=subsetEquals(nums,index+1,n,target,dp);
+//                     return dp[index][target]=take||notTake;
+//     }
+//     bool canPartition(vector<int>& nums) {
+//         int sum=0;
+//         for(int i=0;i<nums.size();i++){
+//             sum+=nums[i];
+//         }
+//         if(sum%2!=0) return false;
+//         sum/=2;
+//         vector<vector<int>> dp(nums.size(),vector<int>(sum+1,-1));
+//         return subsetEquals(nums,0,nums.size(),sum,dp);
+
+//     }
+// };
+
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+
+        int total = 0;
+
+        for(int x : nums) {
+            total += x;
+        }
+
+        if(total % 2 != 0)
+            return false;
+
+        int target = total / 2;
+
+        vector<bool> dp(target + 1, false);
+
+        dp[0] = true;
+  
+        for(int num : nums) {
+
+            for(int j = target; j >= num; j--) {
+
+                dp[j] = dp[j] || dp[j - num];
+
+            }
+        }
+
+        return dp[target];
+    }
+};
